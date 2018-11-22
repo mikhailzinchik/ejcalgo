@@ -1,32 +1,36 @@
 package com.epam.algo;
 
 public class QuickSort {
-    public static void quickSort(int[] array, int lowElem, int highElem) {
-        if (array.length == 0)
-            return;
-        if (lowElem >= highElem)
-            return;
-        int middle = lowElem + (highElem - lowElem) / 2;
-        int mainElem = array[middle];
-        int i = lowElem, j = highElem;
-        while (i <= j) {
-            while (array[i] < mainElem) {
-                i++;
-            }
-            while (array[j] > mainElem) {
-                j--;
-            }
-            if (i <= j) {
-                int temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-                i++;
-                j--;
+    public void sort(int[] array, int startIndex, int endIndex) {
+        int pivotValue = getPivot(array, startIndex, endIndex);
+        int currentStartIndex = startIndex - 1;
+        int currentEndIndex = endIndex + 1;
+
+        while (currentStartIndex < currentEndIndex) {
+            do {
+                currentStartIndex++;
+            } while (array[currentStartIndex] < pivotValue);
+            do {
+                currentEndIndex--;
+            } while (array[currentEndIndex] > pivotValue);
+
+            if (currentStartIndex < currentEndIndex) {
+                int buffer = array[currentStartIndex];
+                array[currentStartIndex] = array[currentEndIndex];
+                array[currentEndIndex] = buffer;
             }
         }
-        if (lowElem < j)
-            quickSort(array, lowElem, j);
-        if (highElem > i)
-            quickSort(array, i, highElem);
+        currentStartIndex--;
+        if ((currentStartIndex > startIndex)
+                && (currentStartIndex - startIndex > 1))
+            sort(array, startIndex, currentStartIndex);
+        currentEndIndex++;
+        if ((endIndex > currentEndIndex)
+                && (endIndex - currentEndIndex > 1))
+            sort(array, currentEndIndex, endIndex);
+    }
+
+    private int getPivot(int[] array, int startIndex, int endIndex) {
+        return array[endIndex - 1];
     }
 }
